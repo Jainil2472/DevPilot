@@ -1,0 +1,7 @@
+allowBuilds:
+  bcrypt: set this to true or false
+  esbuild: set this to true or false
+minimumReleaseAgeExclude:
+  - kareem@3.4.1
+  - mongoose@9.11.2
+  - zod@4.6.7

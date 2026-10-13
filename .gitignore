@@ -1,0 +1,106 @@
+# ==========================================
+# Dependencies & Package Managers
+# ==========================================
+node_modules/
+.pnpm-store/
+.npm/
+.yarn/
+*.tsbuildinfo
+
+# ==========================================
+# Environment Variables & Secrets
+# ==========================================
+.env
+.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+# Keep example env files tracked
+!.env.example
+!.env.template
+
+# ==========================================
+# Build & Distribution Outputs
+# ==========================================
+# General & Backend build
+dist/
+build/
+out/
+bin/
+
+# Frontend build artifacts (Next.js, Vite, Nuxt, etc.)
+.next/
+.turbo/
+.cache/
+.parcel-cache/
+.astro/
+
+# ==========================================
+# Logs & Process Artifacts
+# ==========================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Runtime diagnostic & process IDs
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ==========================================
+# Databases & Local Storage
+# ==========================================
+# SQLite / Local DB dumps
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+
+# Local upload / storage directories (if handled on disk)
+uploads/
+storage/
+
+# ==========================================
+# Testing & Code Coverage
+# ==========================================
+coverage/
+.nyc_output/
+*.lcov
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+cypress/videos/
+cypress/screenshots/
+
+# ==========================================
+# IDEs & Editor Configuration
+# ==========================================
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# ==========================================
+# Operating System Clutter
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
