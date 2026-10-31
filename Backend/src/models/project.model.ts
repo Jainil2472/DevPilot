@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const projectSchema =new mongoose.Schema({
+const projectSchema = new mongoose.Schema({
     name:{
         type: String,
         required: true,
@@ -15,10 +15,6 @@ const projectSchema =new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref:"user",
         required: true,
-    },
-    githubUrl:{
-        type: String,
-        trim: true,
     },
     visibility:{
         type: String,

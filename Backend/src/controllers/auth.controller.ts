@@ -44,8 +44,9 @@ export const loginController : RequestHandler =async (req, res, next)=>{
         const login = await loginService(validateData);
         res.cookie("token", login,{
             httpOnly: true,
-            secure: true,
-            sameSite: "none"
+            // secure: true,
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000
         })
         return res.status(200).json(
             {message: `login token is ${login}`   }

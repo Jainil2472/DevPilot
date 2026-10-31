@@ -6,10 +6,18 @@ interface AuthTokenPayload extends JwtPayload{
   userId: string;
 }
 
-export const authentication: RequestHandler = async (req, res, next) => {
+function isAuthTokenPayload(value: string | JwtPayload): value is AuthTokenPayload{
+  return (
+    typeof value !== "string" && 
+    typeof value.userId === "string" &&
+    value.userId.length > 0
+  );
+}
+
+export const authentication: RequestHandler =  (req, res, next) => {
   try {
     const token = req.cookies?.token;
-
+    
     if (!token) {
       return res.status(401).json({
         error: "You have to log in first"
@@ -22,17 +30,18 @@ export const authentication: RequestHandler = async (req, res, next) => {
         throw new Error("JWT_SECRET_IS_NOT_DEFINED")
     }
 
-    const decoded = jwt.verify(token, secret);
 
-    if (typeof decoded === "string" || typeof decoded.userId !== "string") {
+    const decoded = jwt.verify(token, secret,{algorithms: ["HS256"]});
+
+    if (!isAuthTokenPayload(decoded)) {
       return res.status(401).json({
-        error: "Invalid or expired token, please log in again"
+        error: "Invalid authentication token",
       });
     }
-    console.log(decoded);
+    
     
     res.locals.userId = decoded.userId;
-    next();
+    return next();
   } catch (err) {
 
     if(err instanceof Error && err.message === "JWT_SECRET_IS_NOT_DEFINED"){

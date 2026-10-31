@@ -81,7 +81,7 @@ export async function loginService(input: z.infer<typeof loginValidator>) {
         throw new Error("JWT_SECRET is not configured");
     }
     
-    const jwtToken = jwt.sign(payload,JWT_SECRET, {expiresIn: '1d'});
+    const jwtToken = jwt.sign(payload,JWT_SECRET, {algorithm: "HS256" ,expiresIn: '1d'});
         
     return jwtToken;
 }
