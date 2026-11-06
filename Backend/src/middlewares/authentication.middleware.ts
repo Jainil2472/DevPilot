@@ -39,8 +39,8 @@ export const authentication: RequestHandler =  (req, res, next) => {
       });
     }
     
-    
-    res.locals.userId = decoded.userId;
+    const userId = decoded.userId.toString();
+    res.locals.userId = userId;
     return next();
   } catch (err) {
 

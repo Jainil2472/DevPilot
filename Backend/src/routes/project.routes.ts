@@ -1,10 +1,12 @@
 import  express  from "express";
-import { projectController } from "../controllers/project.controller.js";
+import { projectCreateController, projectDeleteContoller, updateProjectController, userProjectListContoller } from "../controllers/project.controller.js";
 
 
 const router = express.Router();
 
-router.post('/create',projectController)
-
+router.post('/',projectCreateController);
+router.patch('/:projectId',updateProjectController);
+router.get('/',userProjectListContoller);
+router.delete('/:projectId',projectDeleteContoller);
 
 export default router; 
