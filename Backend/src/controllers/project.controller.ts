@@ -1,29 +1,28 @@
 import type { RequestHandler } from "express";
-import { createProjectValidator, updateProjectValidator } from "../validators/Project/project.validators.js";
+import { createProjectValidator, paginationValidation, updateProjectValidator } from "../validators/Project/project.validators.js";
 import { createProject, deleteProject, updateProject, userProjectList } from "../services/Project/project.service.js";
 import mongoose from "mongoose";
 
 
 
 export  const projectCreateController: RequestHandler=async (req,res,next)=>{
-    const body = { ...req.body, userId: res.locals.userId}
     try {
-
-        const validateData = createProjectValidator.safeParse(body);
+        const userId=res.locals.userId;
+        const validateData = createProjectValidator.safeParse(req.body);
+        
         if (!validateData.success) {
         return res.status(400).json({
-            message: "Validation failed",
+            message: "Invalid project data. Please check your input.",
             errors: validateData.error.issues,
         });
         }
-        const response = await createProject(validateData.data);
+        const response = await createProject(validateData.data,userId);
         
         return res.status(201).json({
             message:"Project created sucessfully",
             data: response
         })
     } catch (error) {
-        console.log("something went wrong in controller and service");
         next(error)
     }
 }
@@ -31,10 +30,14 @@ export  const projectCreateController: RequestHandler=async (req,res,next)=>{
 export const userProjectListContoller : RequestHandler = async(req,res,next)=>{
     try {
         const userId = res.locals.userId;
+        
 
-        const projectList = await userProjectList(userId);
+        const validateData = paginationValidation.parse(req.query);
+        
+        const projectList = await userProjectList(userId,validateData);
         return res.status(200).json({
-            data: projectList,
+            success: true,
+            ...projectList,
         });
     } catch (error) {
         next(error)
@@ -51,7 +54,7 @@ export const projectDeleteContoller : RequestHandler = async(req,res,next)=>{
         }
         if (!mongoose.isValidObjectId(projectId)) {
             return res.status(400).json({
-                message: "Invalid project ID",
+                message: "Invalid project ID format.",
             });
         }
         const projectDelete = await deleteProject(projectId,ownerId);
@@ -93,7 +96,6 @@ export const updateProjectController: RequestHandler = async(req,res,next)=>{
         });
 
     } catch (error) {
-        console.log("something went wrong in controller and service");
         next(error)
     }
 }

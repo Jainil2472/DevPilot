@@ -1,18 +1,17 @@
 import { Project } from "../../models/project.model.js";
-import type { createProjectValidator, updateProjectValidator } from "../../validators/Project/project.validators.js";
+import type { createProjectValidator, paginationValidation, updateProjectValidator } from "../../validators/Project/project.validators.js";
 import {z} from 'zod'
 
-export async function createProject(input: z.infer<typeof createProjectValidator>) {
+export async function createProject(input: z.infer<typeof createProjectValidator>,userId: string) {
 
-    const {name,description,visibility,techStack,userId} = input;
-    
+    const {name,description,visibility,techStack} = input;
     const duplicate = await Project.findOne({
         name,
         ownerId: userId
     });
 
     if(duplicate){
-        throw new Error("DUPLICATE_PROJECT")
+        throw new Error("A project with this name already exists in your account.")
     }
 
     const create = await Project.insertOne({
@@ -25,17 +24,60 @@ export async function createProject(input: z.infer<typeof createProjectValidator
     return create
 }
 
-export async function userProjectList(ownerId: string) {
+
+export async function userProjectList(ownerId: string, input: z.infer<typeof paginationValidation>) {
+
+    const page = input.page;
+    const limit = input.limit;
+    const skip = (page-1)* limit;
+
 
     const userProject = await Project.find({
         ownerId: ownerId
+    })
+    .sort({createdAt: -1})
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+
+    const totalProject = await Project.countDocuments({
+        ownerId: ownerId      
     });
-    return userProject;
+
+    const totalPage = Math.ceil(
+        totalProject/limit
+    );
+
+    return {
+        userProject,
+        pagination:{
+            currentPage : page,
+            limit,
+            totalProject,
+            totalPage,
+            hasNextPage: page < totalPage,
+            hasPreviousPage: page > 1,
+        }
+
+    };
     
 }
 
 export async function updateProject(input: z.infer<typeof updateProjectValidator>, projectId: string, userId: string){
     
+    if(input.name){
+        const duplicate = await Project.findOne(
+            {
+                _id : {$ne: projectId},
+                ownerId: userId,
+                name: input.name
+            }
+        )
+        if(duplicate){
+            throw new Error("DUPLICATE_PROJECT");
+        }
+    }
     const update = await Project.findOneAndUpdate(
         {
             _id: projectId,
@@ -51,7 +93,7 @@ export async function updateProject(input: z.infer<typeof updateProjectValidator
         }
     )
     if (!update) {
-        throw new Error("Project not found");
+        throw new Error("Project not found or you do not have permission to access it.");
     }
 
     return update;
@@ -59,10 +101,10 @@ export async function updateProject(input: z.infer<typeof updateProjectValidator
 
 export async function deleteProject(projectId: string,ownerId: string){
 
-    const deleteProject = await Project.findByIdAndDelete(
+    const deleteProject = await Project.findOneAndDelete(
         {
             _id: projectId,
-            ownerId: ownerId,
+            ownerId,
         }
     )
 

@@ -36,9 +36,18 @@ const projectSchema = new mongoose.Schema({
         required: true,
 
 
-    }
+    },
+    deletedAt : {
+        type: Date,
+        default: null
+    },
+    
 },{
     timestamps: true
 });
 
+projectSchema.index(
+    {ownerId:1, name:1},
+    {unique: true}
+)
 export const Project = mongoose.model("project",projectSchema);

@@ -5,7 +5,6 @@ export const createProjectValidator = z.object({
     description: z.string(),
     visibility: z.enum(["PUBLIC","PRIVATE"]),
     techStack: z.array(z.string().nonempty()),
-    userId: z.string(),
 });
 
 export const updateProjectValidator = createProjectValidator
@@ -15,4 +14,7 @@ export const updateProjectValidator = createProjectValidator
     message: "At least one field is required",
   });
 
- 
+export const paginationValidation = z.object({
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(20),
+})

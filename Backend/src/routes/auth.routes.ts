@@ -8,4 +8,5 @@ router.post('/signup',signupController)
 router.get('/verification',emailVerificationController)
 router.post('/login',loginController)
 
+
 export default router; 
