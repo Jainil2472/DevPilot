@@ -11,6 +11,23 @@ const projectRequestSchema = new mongoose.Schema({
         ref: "user", 
         required: true,
     },
+    initiatedBy: {
+        type: Schema.Types.ObjectId,
+        ref: "user", 
+        required: true,
+    },
+    role:{
+        type: String,
+        enum: ["ADMIN", "MEMBER"],
+        required: true,
+        uppercase: true,
+        default: "MEMBER",
+    },
+    type: {
+            type: String,
+            enum: ["JOIN_REQUEST", "INVITATION"],
+            required: true,
+        },
     status: {
         type: String,
         enum: ["PENDING", "ACCEPTED", "REJECTED", "CANCELLED"],

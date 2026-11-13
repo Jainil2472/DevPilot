@@ -2,9 +2,9 @@ import {z } from 'zod'
 
 export const createProjectValidator = z.object({
     name: z.string().trim().min(1).max(100),
-    description: z.string(),
+    description: z.string().trim().min(1).max(2000),
     visibility: z.enum(["PUBLIC","PRIVATE"]),
-    techStack: z.array(z.string().nonempty()),
+    techStack: z.array(z.string().trim().min(1).max(50).nonempty()).max(20),
 });
 
 export const updateProjectValidator = createProjectValidator

@@ -10,7 +10,7 @@ const projectMembershipSchema = new Schema(
 
         userId: {
             type: Schema.Types.ObjectId,
-            ref: "User",
+            ref: "user",
             required: true,
         },
 
@@ -22,6 +22,7 @@ const projectMembershipSchema = new Schema(
             required: true,
         },
 
+        
         status: {
             type: String,
             enum: ["ACTIVE", "LEFT", "REMOVED"],

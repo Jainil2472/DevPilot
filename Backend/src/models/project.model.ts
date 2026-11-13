@@ -48,6 +48,11 @@ const projectSchema = new mongoose.Schema({
 
 projectSchema.index(
     {ownerId:1, name:1},
-    {unique: true}
+    {
+        unique: true,
+        partialFilterExpression: {
+            deletedAt: null,
+        }
+    }
 )
 export const Project = mongoose.model("project",projectSchema);
