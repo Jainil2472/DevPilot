@@ -6,7 +6,7 @@ const projectRequestSchema = new mongoose.Schema({
         ref: "project", 
         required: true,
     },
-    requesterId: {
+    userId: {
         type: Schema.Types.ObjectId,
         ref: "user", 
         required: true,
@@ -37,6 +37,7 @@ const projectRequestSchema = new mongoose.Schema({
     },
     message: {
         type: String,
+        required: false,
         trim: true,
     }
 }, {
