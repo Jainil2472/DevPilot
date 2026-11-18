@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
-import * as projectMembershipService from "../../services/Project/Membership/projectMembership.service.js"; // Adjust path as needed
-import { AppError } from "../../utils/AppError.js";
-import { projectMemberValidator, projectRequestParamsSchema, rejectValidator } from "../../validators/Project/Membership/projectMembership.validators.js";
+import * as projectMembershipService from "../../../services/Project/Membership/projectMembership.service.js"; // Adjust path as needed
+import { AppError } from "../../../utils/AppError.js";
+import { projectMemberValidator, projectRequestParamsSchema, rejectValidator } from "../../../validators/Project/Membership/projectMembership.validators.js";
 
 // 1. Approve Join Request Controller
 export async function approveJoinRequestController(req: Request, res: Response, next: NextFunction) {

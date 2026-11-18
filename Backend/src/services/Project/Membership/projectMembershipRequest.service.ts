@@ -1,8 +1,10 @@
-import { Project } from "../../models/project.model.js";
-import { ProjectJoinRequest } from "../../models/projectJoinRequest.model.js";
-import { ProjectMembership } from "../../models/projectMembership.model.js";
-import { User } from "../../models/user.model.js";
-import { AppError } from "../../utils/AppError.js";
+import type z from "zod";
+import { Project } from "../../../models/project.model.js";
+import { ProjectJoinRequest } from "../../../models/projectJoinRequest.model.js";
+import { ProjectMembership } from "../../../models/projectMembership.model.js";
+import { User } from "../../../models/user.model.js";
+import { AppError } from "../../../utils/AppError.js";
+import type { requestQueryValidator } from "../../../validators/Project/Membership/projectMembershipRequest.validators.js";
 
 //request creation service 
 //join request service
@@ -261,9 +263,80 @@ export async function cancleInvitation(
 
 
 
-//request listing service
-// export async function listJoinRequest(
-//     userId: string,
-// ){
-    
-// }
+
+
+
+
+export async function getSentJoinRequests(
+    userId: string,
+    query: z.infer<typeof requestQueryValidator>
+) {
+    const { page, limit, status } = query;
+    const skip = (page - 1) * limit;
+
+    const filter: Record<string, unknown> = {
+        userId,
+        type: "JOIN_REQUEST",
+    };
+    if (status) filter.status = status;
+
+    const requests = await ProjectJoinRequest.find(filter)
+        .populate("projectId", "name description visibility status techStack")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean();
+
+    const totalRequests = await ProjectJoinRequest.countDocuments(filter);
+    const totalPages = Math.ceil(totalRequests / limit);
+
+    return {
+        requests,
+        pagination: {
+            currentPage: page,
+            limit,
+            totalRequests,
+            totalPages,
+            hasNextPage: page < totalPages,
+            hasPreviousPage: page > 1,
+        },
+    };
+}
+
+// 2. Get incoming invitations for the user
+export async function getIncomingInvitations(
+    userId: string,
+    query: z.infer<typeof requestQueryValidator>
+) {
+    const { page, limit, status } = query;
+    const skip = (page - 1) * limit;
+
+    const filter: Record<string, unknown> = {
+        userId,
+        type: "INVITATION",
+    };
+    if (status) filter.status = status;
+
+    const invitations = await ProjectJoinRequest.find(filter)
+        .populate("projectId", "name description visibility status techStack")
+        .populate("initiatedBy", "username email") // Owner who sent the invitation
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean();
+
+    const totalInvitations = await ProjectJoinRequest.countDocuments(filter);
+    const totalPages = Math.ceil(totalInvitations / limit);
+
+    return {
+        invitations,
+        pagination: {
+            currentPage: page,
+            limit,
+            totalInvitations,
+            totalPages,
+            hasNextPage: page < totalPages,
+            hasPreviousPage: page > 1,
+        },
+    };
+}

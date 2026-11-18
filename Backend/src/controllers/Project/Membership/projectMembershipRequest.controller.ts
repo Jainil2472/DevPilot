@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { cancleValidator, projectInvitationValidator, projectJoinRequestValidator } from "../../../validators/Project/Membership/projectMembershipRequest.validators.js";
-import { cancleInvitation, cancleJoinRequest, createInvitation, createJoinRequest } from "../../../services/Project/Membership/projectMembershipRequest.service.js";
+import { cancleValidator, projectInvitationValidator, projectJoinRequestValidator, requestQueryValidator } from "../../../validators/Project/Membership/projectMembershipRequest.validators.js";
+import { cancleInvitation, cancleJoinRequest, createInvitation, createJoinRequest, getIncomingInvitations, getSentJoinRequests } from "../../../services/Project/Membership/projectMembershipRequest.service.js";
 
 
 //request creation controller 
@@ -91,3 +91,38 @@ export const cancleInvitationController: RequestHandler = async (req , res ,next
 }
 
 
+
+
+
+
+export const getSentJoinRequestsController: RequestHandler = async (req, res, next) => {
+    try {
+        const userId = res.locals.userId;
+        const queryData = requestQueryValidator.parse(req.query);
+
+        const result = await getSentJoinRequests(userId, queryData);
+
+        return res.status(200).json({
+            success: true,
+            ...result,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getIncomingInvitationsController: RequestHandler = async (req, res, next) => {
+    try {
+        const userId = res.locals.userId;
+        const queryData = requestQueryValidator.parse(req.query);
+
+        const result = await getIncomingInvitations(userId, queryData);
+
+        return res.status(200).json({
+            success: true,
+            ...result,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
