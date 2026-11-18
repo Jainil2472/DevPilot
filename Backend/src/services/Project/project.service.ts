@@ -2,8 +2,8 @@ import { Project } from "../../models/project.model.js";
 import type { createProjectValidator, paginationValidation, updateProjectValidator } from "../../validators/Project/project.validators.js";
 import { z } from 'zod';
 import { AppError } from "../../utils/AppError.js";
-import { createOwnerMembership } from "./projectMembership.service.js";
-import { createOwner } from "../../validators/Project/projectMembership.validators.js";
+import { createOwnerMembership } from "./Membership/projectMembership.service.js";
+import { createOwner } from "../../validators/Project/Membership/projectMembership.validators.js";
 import mongoose from "mongoose";
 
 export async function createProject(input: z.infer<typeof createProjectValidator>, userId: string) {

@@ -1,8 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
-import * as projectMembershipService from "../../services/Project/projectMembership.service.js"; // Adjust path as needed
+import * as projectMembershipService from "../../services/Project/Membership/projectMembership.service.js"; // Adjust path as needed
 import { AppError } from "../../utils/AppError.js";
-import { projectRequestParamsSchema, rejectValidator } from "../../validators/Project/projectMembership.validators.js";
-import mongoose from "mongoose";
+import { projectMemberValidator, projectRequestParamsSchema, rejectValidator } from "../../validators/Project/Membership/projectMembership.validators.js";
 
 // 1. Approve Join Request Controller
 export async function approveJoinRequestController(req: Request, res: Response, next: NextFunction) {
@@ -86,5 +85,27 @@ export async function rejectInvitationController(req: Request, res: Response, ne
         });
     } catch (error) {
         next(error);
+    }
+}
+
+
+// 5. list project members 
+export async function projectMemberController(req:Request, res: Response, next: NextFunction) {
+    
+    try {
+        const { projectId } = req.params;
+        const userId = res.locals.userId;
+
+        const validatedData = projectMemberValidator.parse({params: {projectId,userId}})
+
+        const members = await projectMembershipService.getProjectMembers(validatedData.params.projectId,validatedData.params.userId);
+        return res.status(200).json({
+            success: true,
+            message: "Project members retrieved successfully",
+            data: members,
+        });
+        
+    } catch (error) {
+        next(error)
     }
 }

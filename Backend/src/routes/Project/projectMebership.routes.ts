@@ -3,7 +3,8 @@ import {
     approveJoinRequestController,
     acceptInvitationController,
     rejectJoinRequestController,
-    rejectInvitationController
+    rejectInvitationController,
+    projectMemberController
 } from "../../controllers/Project/projectMembership.controller.js"; 
 
 const router = Router();
@@ -32,4 +33,5 @@ router.patch(
     rejectInvitationController
 );
 
+router.get('/:projectId/members',projectMemberController)
 export default router;

@@ -1,5 +1,5 @@
 import  express  from "express";
-import { cancleInvitationController, cancleJoinRequestController, createMembershipInvitationRequestController, createMembershipJoiningRequestController } from "../../controllers/Project/projectMembershipRequest.controller.js";
+import { cancleInvitationController, cancleJoinRequestController, createMembershipInvitationRequestController, createMembershipJoiningRequestController } from "../../controllers/Project/Membership/projectMembershipRequest.controller.js";
 
 
 const router = express.Router();

@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { cancleValidator, projectInvitationValidator, projectJoinRequestValidator } from "../../validators/Project/projectMembershipRequest.validators.js";
-import { cancleInvitation, cancleJoinRequest, createInvitation, createJoinRequest } from "../../services/Project/projectMembershipRequest.service.js";
+import { cancleValidator, projectInvitationValidator, projectJoinRequestValidator } from "../../../validators/Project/Membership/projectMembershipRequest.validators.js";
+import { cancleInvitation, cancleJoinRequest, createInvitation, createJoinRequest } from "../../../services/Project/Membership/projectMembershipRequest.service.js";
 
 
 //request creation controller 

@@ -25,3 +25,10 @@ export const rejectValidator = z.object({
         userId: objectIdSchema,
     }),
 });
+
+export const projectMemberValidator = z.object({
+    params: z.object({
+        projectId: objectIdSchema,
+        userId: objectIdSchema,
+    }),
+});

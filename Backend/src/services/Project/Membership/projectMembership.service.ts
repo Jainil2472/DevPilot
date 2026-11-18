@@ -1,11 +1,11 @@
 import type z from "zod";
-import {  type createOwner } from "../../validators/Project/projectMembership.validators.js";
-import { ProjectMembership } from "../../models/projectMembership.model.js";
-import { Project } from "../../models/project.model.js";
-import { AppError } from "../../utils/AppError.js";
-import { User } from "../../models/user.model.js";
+import {  type createOwner } from "../../../validators/Project/Membership/projectMembership.validators.js";
+import { ProjectMembership } from "../../../models/projectMembership.model.js";
+import { Project } from "../../../models/project.model.js";
+import { AppError } from "../../../utils/AppError.js";
+import { User } from "../../../models/user.model.js";
 import mongoose, { type ClientSession } from "mongoose";
-import { ProjectJoinRequest } from "../../models/projectJoinRequest.model.js";
+import { ProjectJoinRequest } from "../../../models/projectJoinRequest.model.js";
 
 
 //approve the request 
@@ -322,4 +322,52 @@ export async function rejectInvitation(requestId: string, userId: string) {
     );
 
     return findAndReject;
+}
+
+
+
+
+
+
+
+
+
+
+
+//list of members in project 
+
+export async function getProjectMembers(projectId: string, userId: string) {
+    const project = await Project.findOne({
+        _id: projectId,
+        deletedAt: null,
+    });
+
+    if (!project) {
+        throw new AppError(404, "Project not found.", "PROJECT_NOT_FOUND");
+    }
+
+    if (project.visibility === "PRIVATE") {
+        const membership = await ProjectMembership.findOne({
+            projectId,
+            userId,
+            status: "ACTIVE",
+        });
+
+        if (!membership) {
+            throw new AppError(
+                403,
+                "Access denied. You must be a member to view this private project's team.",
+                "FORBIDDEN"
+            );
+        }
+    }
+
+    const members = await ProjectMembership.find({
+        projectId,
+        status: "ACTIVE",
+    })
+        .populate("userId", "username email") 
+        .sort({ joinedAt: 1 });
+
+    return members;
 }
