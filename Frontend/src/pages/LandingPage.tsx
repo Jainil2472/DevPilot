@@ -14,7 +14,7 @@ import {
   Smile,
   Paperclip,
 } from 'lucide-react';
-import { DevPilotLogo } from '#/components/DevPilotLogo';
+import { DevPilotLogo } from '#/components/ui/DevPilotLogo';
 
 // Register ScrollTrigger plugin once at module level
 gsap.registerPlugin(ScrollTrigger);
@@ -184,10 +184,10 @@ const LandingPage: React.FC = () => {
 
       {/* Right CTA Button */}
       <button className="px-5 py-2 rounded-full text-xs font-medium bg-[#120d24] text-purple-200 border border-purple-500/60 shadow-[0_0_20px_rgba(168,85,247,0.45)] hover:shadow-[0_0_28px_rgba(168,85,247,0.75)] hover:border-purple-400 transition-all">
-        App Launch
+        Signup
       </button>
 
-    </header>
+      </header>
 
       {/* HERO CONTENT */}
       <main className="max-w-5xl mx-auto px-6 pt-12 pb-24 text-center relative">
@@ -211,7 +211,7 @@ const LandingPage: React.FC = () => {
         {/* Action Buttons */}
         <div className="hero-item mt-8 flex items-center justify-center gap-4">
           <button className="px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-[0_0_28px_rgba(168,85,247,0.75)] hover:brightness-110 transition-all">
-            Create Project
+            Launch App
           </button>
           <button className="px-6 py-2.5 rounded-full text-xs sm:text-sm font-medium bg-zinc-900/90 text-zinc-300 border border-zinc-700/80 hover:border-zinc-500 hover:text-white transition-all">
             How it Works

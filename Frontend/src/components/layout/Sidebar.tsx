@@ -12,7 +12,7 @@ import {
   LogOut,
   X,
 } from 'lucide-react';
-import DevPilotLogo from '../DevPilotLogo';
+import DevPilotLogo from '../ui/DevPilotLogo';
 
 export interface SidebarProps {
   pendingRequestsCount?: number;
@@ -82,7 +82,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <div className="h-16 px-6 flex items-center justify-between border-b border-white/[0.06]">
             <div className="flex items-center gap-3">
               <div className='flex items-center gap-3 cursor-pointer group'>
-                <DevPilotLogo className="h-10 w-auto transition-transform duration-300 group-hover:scale-105" />
+                <DevPilotLogo className="h-16 w-auto transition-transform duration-300 group-hover:scale-105" />
               </div>
             </div>
 
